@@ -8,9 +8,14 @@ class UserSerializer(serializers.ModelSerializer):
         read_only=True,
         slug_field='posts')
 
+    follower = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field='following')
+
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'posts')
+        fields = ('id', 'username', 'first_name', 'last_name', 'posts', 'following')
         ref_name = 'ReadOnlyUsers'
 
 
@@ -42,12 +47,10 @@ class PostSerializer(serializers.ModelSerializer):
 class FollowSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(
         read_only=True,
-        slug_field='username'
-    )
-    following = serializers.SlugRelatedField(
         slug_field='username',
-        queryset=User.objects.all()
+        default=serializers.CurrentUserDefault()
     )
+    following = serializers.SlugRelatedField(slug_field='username', read_only=True)
 
     class Meta:
         model = Follow
