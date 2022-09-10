@@ -1,22 +1,13 @@
-from posts.models import Comment, Follow, Group, Post, User
 from rest_framework import serializers
+
+from posts.models import Comment, Follow, Group, Post, User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    posts = serializers.SlugRelatedField(
-        many=True,
-        read_only=True,
-        slug_field='posts')
-
-    follower = serializers.SlugRelatedField(
-        many=True,
-        read_only=True,
-        slug_field='following')
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'posts', 'following')
-        ref_name = 'ReadOnlyUsers'
+        fields = ('id', 'username', 'first_name', 'last_name')
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -50,14 +41,17 @@ class FollowSerializer(serializers.ModelSerializer):
         slug_field='username',
         default=serializers.CurrentUserDefault()
     )
-    following = serializers.SlugRelatedField(slug_field='username', read_only=True)
+    following = serializers.SlugRelatedField(
+        slug_field='username',
+        queryset=User.objects.all()
+    )
 
     class Meta:
         model = Follow
         fields = ('user', 'following')
         validators = [
             serializers.UniqueTogetherValidator(
-                queryset=User.objects.all(),
+                queryset=Follow.objects.all(),
                 fields=('user', 'following'),
                 message='Подписка на данного автора уже оформлена'
             )

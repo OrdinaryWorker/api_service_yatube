@@ -1,12 +1,13 @@
+from django.shortcuts import get_object_or_404
+from rest_framework import filters, pagination, permissions, viewsets
+
 from api.permissions import CommentAuthPermission, PostAuthPermission
 from api.serializers import (CommentSerializer, FollowSerializer,
                              GroupSerializer, PostSerializer, UserSerializer)
-from django.shortcuts import get_object_or_404
-from posts.models import Comment, Follow, Group, Post, User
-from rest_framework import permissions, viewsets, filters, pagination
+from posts.models import Comment, Group, Post, User
 
 
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -32,16 +33,12 @@ class FollowViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter, ]
     search_fields = ('following__username', )
 
-    def get_following(self):
-        return get_object_or_404(User, id=self.kwargs.get("username"))
-
     def get_queryset(self):
-        user = self.get_following()
-        new_queryset = Follow.objects.filter(user=user).follower
+        new_queryset = self.request.user.follower.all()
         return new_queryset
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user, following=self.get_following())
+        serializer.save(user=self.request.user)
 
 
 class CommentViewSet(viewsets.ModelViewSet):
