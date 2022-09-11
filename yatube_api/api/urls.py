@@ -5,7 +5,10 @@ from .views import (CommentViewSet, FollowViewSet, GroupViewSet, PostViewSet,
                     UserViewSet)
 
 router = DefaultRouter()
-router.register('posts', PostViewSet)
+router.register('posts',
+                PostViewSet,
+                basename='posts'
+                )
 router.register('groups',
                 GroupViewSet,
                 basename='groups'
@@ -22,6 +25,5 @@ router.register('follow',
 
 urlpatterns = [
     path('v1/', include(router.urls)),
-    path('v1/', include('djoser.urls')),
     path('v1/', include('djoser.urls.jwt')),
 ]
