@@ -1,12 +1,12 @@
 # Yatube API
-## Backend Yatube with API ready for frontend development or mobile application using
-## APi-сервис Yatube, имеющий тот же функционал что и Yatube_Django_project(https://github.com/OrdinaryWorker/Yatube_Django_project), но предотсавляющий исключительно интерфейс для других веб-сервисов и мобильных приложений. Основным используемым модулем явлеяется DRF, для аутентификации пользователей использйется модуль JWT.
+### Описание:
+APi-сервис Yatube, имеющий тот же функционал что и Yatube_Django_project(https://github.com/OrdinaryWorker/Yatube_Django_project), но предотсавляющий исключительно интерфейс для других веб-сервисов и мобильных приложений. Основным используемым модулем явлеяется DRF, для аутентификации пользователей использйется модуль JWT.
 ### Стек технологий:
 * Python 3.7
 * Django 2.2.19
 * Django-rest-api
 * JWT + Djoser token authentication
-### Запуск проекта в DEV-режиме
+### Запуск проекта в DEV-режиме:
 * Setup and activate venv 'source venv/Scripts/activate'
 * Setup plugins from requirements.txt 'pip install -r requirements.txt'
 * Appling migrations 'python manage.py migrate'
